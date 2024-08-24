@@ -4,11 +4,24 @@ const quoteText=document.getElementById("quote")
 const authorText=document.getElementById("author")
 const twitterBtn=document.getElementById("twitter")
 const addQuote=document.getElementById("new-quote")
+const loader=document.querySelector('.loader')
 
 let apiQuotes=[];
 
+function loading(){
+    loader.hidden=false;
+    quoteContainer.hidden=true
+}
+
+//hide loading
+function complete(){
+    loader.hidden=true;
+    quoteContainer.hidden=false;
+}
+
 function newQuote(){
     //pick a random quote from API quotes array
+    loading()
     const quote=apiQuotes[Math.floor(Math.random()*apiQuotes.length)];
     console.log(quote)
     if(!quote.author){
@@ -21,10 +34,12 @@ function newQuote(){
     }else{
         quoteText.classList.remove('long-quote')
     }
-    quoteText.textContent=quote.quote
+    quoteText.textContent=quote.quote;
+    complete();
 }
 
 async function fetchQuotes(){
+    loading()
     try{
         const data=await fetch('https://dummyjson.com/quotes')
         const response=await data.json()
